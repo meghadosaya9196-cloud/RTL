@@ -1,12 +1,17 @@
-`timescale 1ns/1ns
-module full_adder(
-	input a,
-	input b,
-	input cin,
-	output sum,
-	output cout);
-	
-	assign sum= a^b^cin;
-        assign cout= (a & b) | (b & cin) | (cin & a);
+module tb_half_adder;
+	reg a;
+	reg b;
+	wire sum;
+	wire carry;
 
-endmodule 
+	half_adder dut(.a(a),.b(b),.sum(sum),.carry(carry));
+
+	initial begin
+		a=0;b=0;#10;
+		a=0;b=1;#10;
+		a=1;b=0;#10;
+		a=1;b=1;#10;
+		$finish;
+	end
+endmodule
+
