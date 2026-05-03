@@ -1,4 +1,3 @@
-
 module hart_stub (
     input  logic        clk,
     input  logic        rst,

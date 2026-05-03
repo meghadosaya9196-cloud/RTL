@@ -1,0 +1,87 @@
+run 3000ns
+GPR init: gpr[5]=0xdeadbeef
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+SCENARIO 1: Full GPR access path
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+--- Step 1: Activate DM ---
+  DMI WRITE addr=0x10 data=0x00000001
+--- Step 2: Read dmstatus ---
+  DMI READ  addr=0x11 data=0x00000c02
+  PASS: version=2
+--- Step 3: Halt hart ---
+  DMI WRITE addr=0x10 data=0x80000001
+  DMI WRITE addr=0x10 data=0x00000001
+  DMI READ  addr=0x11 data=0x00000302
+  PASS: allhalted=1
+--- Step 4: Read GPR x5 ---
+  DMI WRITE addr=0x17 data=0x00221005
+  DMI READ  addr=0x16 data=0x00001000
+  DMI READ  addr=0x16 data=0x00000000
+  abstractcs.busy=0 done
+  DMI READ  addr=0x04 data=0xdeadbeef
+  PASS: x5=0xdeadbeef
+--- Step 5: Write GPR x5 ---
+  DMI WRITE addr=0x04 data=0xcafebabe
+  DMI WRITE addr=0x17 data=0x00231005
+  DMI READ  addr=0x16 data=0x00001000
+  DMI READ  addr=0x16 data=0x00000000
+  abstractcs.busy=0 done
+  Write x5=0xCAFEBABE done
+--- Step 6: Read-back x5 ---
+  DMI WRITE addr=0x17 data=0x00221005
+  DMI READ  addr=0x16 data=0x00001000
+  DMI READ  addr=0x16 data=0x00000000
+  abstractcs.busy=0 done
+  DMI READ  addr=0x04 data=0xcafebabe
+  PASS: x5=0xcafebabe
+--- Step 7: Resume hart ---
+  DMI WRITE addr=0x10 data=0x40000001
+  DMI WRITE addr=0x10 data=0x00000001
+  DMI READ  addr=0x11 data=0x00000c02
+  PASS: allrunning=1
+SCENARIO 1: COMPLETE
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+SCENARIO 2: Error path + recovery
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+--- Step 1: Cmd while running ---
+  DMI WRITE addr=0x17 data=0x00221005
+  DMI READ  addr=0x16 data=0x00000400
+  PASS: cmderr=4 halt mismatch
+--- Step 2: Halt hart ---
+  DMI WRITE addr=0x10 data=0x80000001
+  DMI WRITE addr=0x10 data=0x00000001
+--- Step 3: Clear cmderr ---
+  DMI WRITE addr=0x16 data=0x00000700
+  DMI READ  addr=0x16 data=0x00000000
+  PASS: cmderr cleared
+--- Step 4: Retry read x5 ---
+  DMI WRITE addr=0x17 data=0x00221005
+  DMI READ  addr=0x16 data=0x00001000
+  DMI READ  addr=0x16 data=0x00000000
+  abstractcs.busy=0 done
+  DMI READ  addr=0x04 data=0xcafebabe
+  PASS: retry x5=0xcafebabe
+SCENARIO 2: COMPLETE
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+SCENARIO 3: CSR path â€” mtvec
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+--- Step 1: Write mtvec CSR ---
+  DMI WRITE addr=0x04 data=0xabcd1234
+  DMI WRITE addr=0x17 data=0x00230305
+  DMI READ  addr=0x16 data=0x00001000
+  DMI READ  addr=0x16 data=0x00000000
+  abstractcs.busy=0 done
+  Write mtvec=0xABCD1234 done
+--- Step 2: Read back mtvec ---
+  DMI WRITE addr=0x17 data=0x00220305
+  DMI READ  addr=0x16 data=0x00001000
+  DMI READ  addr=0x16 data=0x00000000
+  abstractcs.busy=0 done
+  DMI READ  addr=0x04 data=0xabcd1234
+  PASS: mtvec=0xabcd1234 confirmed
+SCENARIO 3: COMPLETE
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+All Part D scenarios complete
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+$finish called at time : 1865 ns : File "C:/DM/tb_Integration.sv" Line 355
+create_wave_config; add_wave /; set_property needs_save false [current_wave_config]

@@ -1,0 +1,37 @@
+C1 caption:
+
+"haltreq=1 written to dmcontrol causes
+halt_resume_ctrl to assert halt signal
+to hart_stub. allhalted remains 0 until
+hart_stub confirms by asserting halted=1,
+demonstrating correct handshake — DM
+waits for hart confirmation before
+updating dmstatus."
+
+C2 caption:
+
+"resumereq=1 causes halt_resume_ctrl to
+pulse resume for exactly one clock cycle.
+hart_stub responds by asserting running=1
+and dropping halted=0. allrunning becomes
+1 only after hart confirms, showing
+correct resume handshake."
+
+C3 caption:
+
+"haltreq and resumereq asserted in same
+clock cycle at ~140ns. halt signal goes
+HIGH while resume stays LOW — halt wins
+as required by RISC-V Debug Spec. This
+prevents accidental resume during an
+ongoing halt sequence."
+
+C4 caption: 
+"At ~180ns hart spontaneously drops
+halted=0 without any resumereq from
+debugger, simulating an NMI event.
+DM immediately detects the falling edge
+of halted — allhalted updates to 0 and
+allrunning updates to 1 automatically,
+showing DM correctly monitors hart state
+independent of debugger commands."
