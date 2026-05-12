@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 760" font-family="-apple-system, system-ui, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#15803d"/>
+    </marker>
+    <marker id="arrRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/>
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/>
+    </marker>
+    <marker id="arrGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="760" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="620" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">DRAM Refresh Scheduler — FSM State Diagram</text>
+  <text x="620" y="54" text-anchor="middle" font-size="12" fill="#64748b">6-state Moore machine · refresh_fsm.sv · TIMEOUT_CYCLES = 64</text>
+
+  <!-- ============ TOP ROW ============ -->
+
+  <!-- IDLE -->
+  <rect x="50" y="120" width="180" height="100" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+  <text x="140" y="148" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">IDLE</text>
+  <text x="140" y="167" text-anchor="middle" font-size="10" fill="#64748b" font-family="monospace">3'd0</text>
+  <line x1="65" y1="178" x2="215" y2="178" stroke="#cbd5e1" stroke-width="0.7"/>
+  <text x="140" y="195" text-anchor="middle" font-size="10" fill="#475569">refresh_req = 0</text>
+  <text x="140" y="210" text-anchor="middle" font-size="10" fill="#475569">timer held at 0</text>
+
+  <!-- WAIT_FOR_REFRESH -->
+  <rect x="290" y="120" width="180" height="100" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+  <text x="380" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">WAIT_FOR_REFRESH</text>
+  <text x="380" y="167" text-anchor="middle" font-size="10" fill="#64748b" font-family="monospace">3'd1</text>
+  <line x1="305" y1="178" x2="455" y2="178" stroke="#cbd5e1" stroke-width="0.7"/>
+  <text x="380" y="195" text-anchor="middle" font-size="10" fill="#475569">refresh_req = 0</text>
+  <text x="380" y="210" text-anchor="middle" font-size="10" fill="#475569">timer counting</text>
+
+  <!-- REQUEST_REFRESH -->
+  <rect x="530" y="120" width="180" height="100" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="620" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#7c2d12">REQUEST_REFRESH</text>
+  <text x="620" y="167" text-anchor="middle" font-size="10" fill="#7c2d12" font-family="monospace">3'd2</text>
+  <line x1="545" y1="178" x2="695" y2="178" stroke="#fcd34d" stroke-width="0.7"/>
+  <text x="620" y="195" text-anchor="middle" font-size="10" font-weight="700" fill="#7c2d12">refresh_req = 1</text>
+  <text x="620" y="210" text-anchor="middle" font-size="10" fill="#7c2d12" font-style="italic">(1 cycle)</text>
+
+  <!-- WAIT_FOR_ACK -->
+  <rect x="770" y="120" width="180" height="100" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="860" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="#7c2d12">WAIT_FOR_ACK</text>
+  <text x="860" y="167" text-anchor="middle" font-size="10" fill="#7c2d12" font-family="monospace">3'd3</text>
+  <line x1="785" y1="178" x2="935" y2="178" stroke="#fcd34d" stroke-width="0.7"/>
+  <text x="860" y="195" text-anchor="middle" font-size="10" font-weight="700" fill="#7c2d12">refresh_req = 1</text>
+  <text x="860" y="210" text-anchor="middle" font-size="10" fill="#7c2d12" font-style="italic">timeout counter ++</text>
+
+  <!-- ============ BOTTOM ROW ============ -->
+
+  <!-- COMPLETE -->
+  <rect x="530" y="430" width="180" height="100" rx="12" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="620" y="458" text-anchor="middle" font-size="15" font-weight="700" fill="#14532d">COMPLETE</text>
+  <text x="620" y="477" text-anchor="middle" font-size="10" fill="#14532d" font-family="monospace">3'd4</text>
+  <line x1="545" y1="488" x2="695" y2="488" stroke="#86efac" stroke-width="0.7"/>
+  <text x="620" y="505" text-anchor="middle" font-size="10" font-weight="700" fill="#14532d">done_pulse = 1</text>
+  <text x="620" y="520" text-anchor="middle" font-size="10" fill="#14532d" font-style="italic">(1 cycle)</text>
+
+  <!-- ERROR -->
+  <rect x="970" y="430" width="220" height="100" rx="12" fill="#fee2e2" stroke="#b91c1c" stroke-width="2.5"/>
+  <text x="1080" y="458" text-anchor="middle" font-size="15" font-weight="700" fill="#7f1d1d">ERROR</text>
+  <text x="1080" y="477" text-anchor="middle" font-size="10" fill="#7f1d1d" font-family="monospace">3'd5</text>
+  <line x1="985" y1="488" x2="1175" y2="488" stroke="#fca5a5" stroke-width="0.7"/>
+  <text x="1080" y="505" text-anchor="middle" font-size="10" font-weight="700" fill="#7f1d1d">timeout_error = 1 (sticky)</text>
+  <text x="1080" y="520" text-anchor="middle" font-size="10" fill="#7f1d1d" font-style="italic">parks until clear_error</text>
+
+  <!-- ============ RESET arrow into IDLE ============ -->
+  <line x1="140" y1="80" x2="140" y2="118" stroke="#334155" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="140" y="72" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">!PRESETn</text>
+
+  <!-- ============ TRANSITIONS ============ -->
+
+  <!-- 1. IDLE -> WAIT_FOR_REFRESH (enable=1) -->
+  <line x1="230" y1="160" x2="288" y2="160" stroke="#334155" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="259" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">enable=1</text>
+
+  <!-- 2. WAIT_FOR_REFRESH -> IDLE (enable=0) — curve above -->
+  <path d="M 295 130 Q 260 80 225 130" fill="none" stroke="#94a3b8" stroke-width="1.6" marker-end="url(#arrGray)"/>
+  <text x="260" y="100" text-anchor="middle" font-size="10" fill="#64748b" font-style="italic">enable=0</text>
+
+  <!-- 3. WAIT_FOR_REFRESH -> REQUEST_REFRESH (refresh_due=1) -->
+  <line x1="470" y1="160" x2="528" y2="160" stroke="#334155" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="499" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">refresh_due=1</text>
+
+  <!-- 4. REQUEST_REFRESH -> WAIT_FOR_ACK (unconditional, 1 cycle) -->
+  <line x1="710" y1="160" x2="768" y2="160" stroke="#334155" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="739" y="152" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">unconditional</text>
+  <text x="739" y="138" text-anchor="middle" font-size="9" fill="#64748b" font-style="italic">(next clk)</text>
+
+  <!-- 5. WAIT_FOR_ACK -> COMPLETE (refresh_ack=1) -->
+  <path d="M 820 220 Q 740 340 660 428" fill="none" stroke="#15803d" stroke-width="2" marker-end="url(#arrGreen)"/>
+  <text x="700" y="305" text-anchor="middle" font-size="11" font-weight="700" fill="#14532d">refresh_ack=1</text>
+
+  <!-- 6. WAIT_FOR_ACK -> ERROR (timeout) -->
+  <path d="M 900 220 Q 1000 340 1080 428" fill="none" stroke="#b91c1c" stroke-width="2.2" marker-end="url(#arrRed)"/>
+  <text x="1030" y="310" text-anchor="middle" font-size="11" font-weight="700" fill="#7f1d1d">timeout_hit</text>
+  <text x="1030" y="325" text-anchor="middle" font-size="10" fill="#7f1d1d" font-style="italic">(counter ≥ 64)</text>
+
+  <!-- 7. COMPLETE -> WAIT_FOR_REFRESH (loop back, unconditional) -->
+  <path d="M 560 430 Q 400 360 380 222" fill="none" stroke="#15803d" stroke-width="2" marker-end="url(#arrGreen)"/>
+  <text x="430" y="370" text-anchor="middle" font-size="11" font-weight="700" fill="#14532d">unconditional</text>
+  <text x="430" y="385" text-anchor="middle" font-size="10" fill="#14532d" font-style="italic">(next clk)</text>
+
+  <!-- 8. ERROR -> IDLE (clear_error) — long curve under everything back to IDLE -->
+  <path d="M 1080 530 Q 1080 670 600 670 Q 140 670 140 222" fill="none" stroke="#1d4ed8" stroke-width="2.2" marker-end="url(#arrBlue)" stroke-dasharray="6 3"/>
+  <text x="600" y="660" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">clear_error  (SW writes CONTROL[1]=1)</text>
+  <text x="600" y="690" text-anchor="middle" font-size="10" fill="#475569" font-style="italic">FSM parks in ERROR until software acknowledges and recovers</text>
+
+  <!-- ============ LEGEND ============ -->
+  <rect x="50" y="280" width="430" height="125" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="65" y="302" font-size="12" font-weight="700" fill="#0f172a">Legend</text>
+
+  <rect x="65" y="312" width="14" height="14" rx="3" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text x="88" y="324" font-size="11" fill="#334155">idle / waiting state — no outputs asserted</text>
+
+  <rect x="65" y="334" width="14" height="14" rx="3" fill="#fef3c7" stroke="#b45309" stroke-width="1.5"/>
+  <text x="88" y="346" font-size="11" fill="#334155">active state — driving refresh_req to DRAM</text>
+
+  <rect x="65" y="356" width="14" height="14" rx="3" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+  <text x="88" y="368" font-size="11" fill="#334155">happy-path completion — generates done_pulse</text>
+
+  <rect x="65" y="378" width="14" height="14" rx="3" fill="#fee2e2" stroke="#b91c1c" stroke-width="1.5"/>
+  <text x="88" y="390" font-size="11" fill="#334155">error trap — sticky, requires software clear</text>
+
+  <!-- Transition legend -->
+  <rect x="780" y="595" width="410" height="140" rx="8" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="795" y="617" font-size="12" font-weight="700" fill="#0f172a">Transition types</text>
+
+  <line x1="795" y1="635" x2="830" y2="635" stroke="#334155" stroke-width="2"/>
+  <text x="838" y="639" font-size="11" fill="#334155">happy-path forward edge</text>
+
+  <line x1="795" y1="655" x2="830" y2="655" stroke="#15803d" stroke-width="2"/>
+  <text x="838" y="659" font-size="11" fill="#334155">success / loopback edge</text>
+
+  <line x1="795" y1="675" x2="830" y2="675" stroke="#b91c1c" stroke-width="2.2"/>
+  <text x="838" y="679" font-size="11" fill="#334155">error edge (timeout fired)</text>
+
+  <line x1="795" y1="695" x2="830" y2="695" stroke="#1d4ed8" stroke-width="2.2" stroke-dasharray="6 3"/>
+  <text x="838" y="699" font-size="11" fill="#334155">software-driven recovery</text>
+
+  <line x1="795" y1="715" x2="830" y2="715" stroke="#94a3b8" stroke-width="1.6"/>
+  <text x="838" y="719" font-size="11" fill="#334155">disable / abort (enable=0)</text>
+</svg>
