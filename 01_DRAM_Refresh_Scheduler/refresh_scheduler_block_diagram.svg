@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" font-family="-apple-system, system-ui, sans-serif">
+  <defs>
+    <marker id="arrGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/>
+    </marker>
+    <marker id="arrAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b45309"/>
+    </marker>
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#15803d"/>
+    </marker>
+    <marker id="arrPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6d28d9"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="620" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">DRAM Refresh Scheduler — Block Diagram</text>
+  <text x="500" y="50" text-anchor="middle" font-size="12" fill="#64748b">refresh_scheduler_top.sv  (APB slave + Refresh Timer + 6-state FSM)</text>
+
+  <!-- DUT outer dashed box -->
+  <rect x="180" y="80" width="640" height="430" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="200" y="102" font-size="12" fill="#64748b" font-style="italic" font-weight="600">refresh_scheduler_top (DUT)</text>
+
+  <!-- APB Master -->
+  <rect x="30" y="220" width="130" height="120" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="95" y="260" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">APB Master</text>
+  <text x="95" y="282" text-anchor="middle" font-size="11" fill="#1e3a8a">(CPU / TB)</text>
+  <text x="95" y="308" text-anchor="middle" font-size="10" fill="#475569">Config writes</text>
+  <text x="95" y="322" text-anchor="middle" font-size="10" fill="#475569">Status reads</text>
+
+  <!-- APB Slave (register bank) -->
+  <rect x="210" y="135" width="240" height="200" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="330" y="160" text-anchor="middle" font-size="14" font-weight="700" fill="#7c2d12">apb_refresh_scheduler</text>
+  <text x="330" y="177" text-anchor="middle" font-size="10" fill="#7c2d12" font-style="italic">register bank · W1C · PSLVERR</text>
+  <line x1="225" y1="187" x2="435" y2="187" stroke="#b45309" stroke-width="0.8" stroke-dasharray="3 2"/>
+  <text x="225" y="204" font-size="11" fill="#1f2937" font-family="monospace">0x00  CONTROL</text>
+  <text x="225" y="222" font-size="11" fill="#1f2937" font-family="monospace">0x04  STATUS</text>
+  <text x="225" y="240" font-size="11" fill="#1f2937" font-family="monospace">0x08  INTERVAL</text>
+  <text x="225" y="258" font-size="11" fill="#1f2937" font-family="monospace">0x0C  COUNT</text>
+  <text x="225" y="276" font-size="11" fill="#1f2937" font-family="monospace">0x10  ERR_STATUS</text>
+  <text x="330" y="305" text-anchor="middle" font-size="9" fill="#94a3b8" font-style="italic">PREADY = 1 (zero-wait-state)</text>
+  <text x="330" y="322" text-anchor="middle" font-size="9" fill="#94a3b8" font-style="italic">PSLVERR on illegal address</text>
+
+  <!-- Refresh Timer -->
+  <rect x="500" y="135" width="260" height="105" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="630" y="160" text-anchor="middle" font-size="14" font-weight="700" fill="#14532d">refresh_timer</text>
+  <text x="630" y="178" text-anchor="middle" font-size="10" fill="#14532d" font-style="italic">free-running interval counter</text>
+  <line x1="515" y1="188" x2="745" y2="188" stroke="#15803d" stroke-width="0.8" stroke-dasharray="3 2"/>
+  <text x="630" y="208" text-anchor="middle" font-size="11" fill="#334155">counter ≥ refresh_interval</text>
+  <text x="630" y="224" text-anchor="middle" font-size="11" fill="#334155">→ pulse refresh_due (1 cycle)</text>
+
+  <!-- FSM -->
+  <rect x="500" y="290" width="260" height="160" rx="10" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+  <text x="630" y="316" text-anchor="middle" font-size="14" font-weight="700" fill="#4c1d95">refresh_scheduler_fsm</text>
+  <text x="630" y="334" text-anchor="middle" font-size="10" fill="#4c1d95" font-style="italic">6-state Moore FSM</text>
+  <line x1="515" y1="344" x2="745" y2="344" stroke="#6d28d9" stroke-width="0.8" stroke-dasharray="3 2"/>
+  <text x="515" y="362" font-size="10" fill="#334155">IDLE → WAIT_FOR_REFRESH</text>
+  <text x="515" y="378" font-size="10" fill="#334155">→ REQUEST_REFRESH → WAIT_FOR_ACK</text>
+  <text x="515" y="394" font-size="10" fill="#334155">→ COMPLETE  |  → ERROR (timeout)</text>
+  <text x="515" y="418" font-size="10" fill="#475569" font-style="italic">+ 64-cycle timeout counter</text>
+  <text x="515" y="434" font-size="10" fill="#475569" font-style="italic">+ sticky timeout_error flag</text>
+
+  <!-- DRAM Controller (external) -->
+  <rect x="850" y="320" width="120" height="100" rx="10" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+  <text x="910" y="358" text-anchor="middle" font-size="14" font-weight="700" fill="#7f1d1d">DRAM</text>
+  <text x="910" y="378" text-anchor="middle" font-size="12" fill="#7f1d1d">Controller</text>
+  <text x="910" y="402" text-anchor="middle" font-size="10" fill="#475569" font-style="italic">(downstream)</text>
+
+  <!-- APB Master -> Slave (request channel) -->
+  <line x1="160" y1="245" x2="208" y2="245" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrBlue)"/>
+  <text x="184" y="225" text-anchor="middle" font-size="9" fill="#1e3a8a">PSEL, PENABLE,</text>
+  <text x="184" y="237" text-anchor="middle" font-size="9" fill="#1e3a8a">PWRITE, PADDR, PWDATA</text>
+
+  <!-- Slave -> Master (response channel) -->
+  <line x1="208" y1="295" x2="160" y2="295" stroke="#1d4ed8" stroke-width="2" marker-end="url(#arrBlue)"/>
+  <text x="184" y="313" text-anchor="middle" font-size="9" fill="#1e3a8a">PRDATA, PREADY,</text>
+  <text x="184" y="325" text-anchor="middle" font-size="9" fill="#1e3a8a">PSLVERR</text>
+
+  <!-- Slave -> Timer (enable, interval) -->
+  <line x1="450" y1="195" x2="498" y2="180" stroke="#475569" stroke-width="1.6" marker-end="url(#arrGray)"/>
+  <text x="475" y="170" font-size="10" fill="#334155" font-weight="600">enable</text>
+  <text x="475" y="184" font-size="10" fill="#334155" font-weight="600">refresh_interval</text>
+
+  <!-- Slave -> FSM (enable, clear_error) -->
+  <line x1="450" y1="265" x2="498" y2="320" stroke="#475569" stroke-width="1.6" marker-end="url(#arrGray)"/>
+  <text x="455" y="290" font-size="10" fill="#334155" font-weight="600">enable</text>
+  <text x="455" y="304" font-size="10" fill="#334155" font-weight="600">clear_error</text>
+
+  <!-- Timer -> FSM (refresh_due) -->
+  <line x1="630" y1="242" x2="630" y2="288" stroke="#15803d" stroke-width="2" marker-end="url(#arrGreen)"/>
+  <text x="640" y="270" font-size="11" fill="#14532d" font-weight="700">refresh_due</text>
+
+  <!-- FSM -> Slave (status feedback) -->
+  <path d="M 498 380 Q 470 380 470 360 Q 470 340 450 340" fill="none" stroke="#6d28d9" stroke-width="1.6" marker-end="url(#arrPurple)"/>
+  <text x="455" y="372" font-size="10" fill="#4c1d95" font-weight="600">refresh_req</text>
+  <text x="455" y="386" font-size="10" fill="#4c1d95" font-weight="600">done_pulse</text>
+  <text x="455" y="400" font-size="10" fill="#4c1d95" font-weight="600">timeout_err</text>
+  <text x="455" y="414" font-size="10" fill="#4c1d95" font-weight="600">state_dbg[2:0]</text>
+
+  <!-- FSM <-> DRAM handshake -->
+  <line x1="760" y1="355" x2="848" y2="355" stroke="#b45309" stroke-width="2.2" marker-end="url(#arrAmber)"/>
+  <text x="804" y="346" text-anchor="middle" font-size="11" fill="#7c2d12" font-weight="700">refresh_req</text>
+
+  <line x1="848" y1="390" x2="760" y2="390" stroke="#b45309" stroke-width="2.2" marker-end="url(#arrAmber)"/>
+  <text x="804" y="406" text-anchor="middle" font-size="11" fill="#7c2d12" font-weight="700">refresh_ack</text>
+
+  <!-- Footer notes -->
+  <rect x="30" y="535" width="940" height="60" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="50" y="555" font-size="11" font-weight="700" fill="#0f172a">Clocking &amp; Reset:</text>
+  <text x="160" y="555" font-size="11" fill="#334155">single clock domain  PCLK (100 MHz in TB)  ·  async-assert active-low reset  PRESETn</text>
+  <text x="50" y="575" font-size="11" font-weight="700" fill="#0f172a">Parameters:</text>
+  <text x="125" y="575" font-size="11" fill="#334155" font-family="monospace">ADDR_WIDTH=8, DATA_WIDTH=32, CNT_WIDTH=32, TIMEOUT_CYCLES=64</text>
+
+  <!-- Legend -->
+  <g font-size="10">
+    <rect x="540" y="548" width="14" height="10" fill="#dbeafe" stroke="#1d4ed8"/>
+    <text x="560" y="557" fill="#334155">APB master</text>
+    <rect x="625" y="548" width="14" height="10" fill="#fef3c7" stroke="#b45309"/>
+    <text x="645" y="557" fill="#334155">control plane</text>
+    <rect x="720" y="548" width="14" height="10" fill="#dcfce7" stroke="#15803d"/>
+    <text x="740" y="557" fill="#334155">timing</text>
+    <rect x="790" y="548" width="14" height="10" fill="#ede9fe" stroke="#6d28d9"/>
+    <text x="810" y="557" fill="#334155">sequencer</text>
+    <rect x="870" y="548" width="14" height="10" fill="#fee2e2" stroke="#b91c1c"/>
+    <text x="890" y="557" fill="#334155">external</text>
+  </g>
+  <g font-size="10">
+    <line x1="540" y1="582" x2="568" y2="582" stroke="#b45309" stroke-width="2.2"/>
+    <text x="576" y="586" fill="#334155">2-phase req/ack handshake (to DRAM)</text>
+  </g>
+</svg>
