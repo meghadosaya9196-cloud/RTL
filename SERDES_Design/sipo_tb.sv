@@ -16,7 +16,7 @@ ser_in = 0;
 shift_en = 1;
 #10 rst = 0;
 #10 shift_en = 0;
-  repeat (10) begin
+repeat (10) begin
 #10 ser_in = 1;
 #10 ser_in = 0;
 end
@@ -29,13 +29,11 @@ repeat (10) begin
 end
 #10 shift_en = 1;
 #100;
-  #50 $finish;
+end
+#50 $finish;
 end
 initial begin
 $dumpfile("sipo.vcd");
 $dumpvars(2, tb_SIPO);
 end
 endmodule
-
-end
-  
